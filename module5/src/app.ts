@@ -1,13 +1,19 @@
+// you can use abstract to mark a class, this forces you to use a certain method in all other inhertied classes.
+
+
+//Private constructor. Helpful to manage singleton pattern.
+
+
 class Department { 
   private employees: string[] = [];
 
   //Allows you to write functions that run on creation of the class.
-  //Shorthand for adding values to the class like id and public. Can be declared elsewhere. 
+  //Shorthand for class propertoes like id and public. Can be declared elsewhere. 
   constructor(private readonly id: string, public name: string) {
   }
 
   describe() {
-    console.log(`Department(${this.id}):  + ${this.name}`);
+    console.log(`Department(${this.id}): + ${this.name}`);
   }
 
   addEmployee(employee: string) {
@@ -20,12 +26,39 @@ class Department {
   }
 }
 
+//extends keyword inherits from another class.
+class ITDepartment extends Department {
+  private lastReport: string;
+
+  //Can add a getter to retieve something private from another class
+  get mostRecentReport() {
+    if (this.lastReport) {
+      return this.lastReport
+    }
+    throw new Error('No report found.')
+  }
+
+  //Setter
+  set mostRecentReport(value: string) {
+    this.addReport(value);
+  }
+
+  constructor(id:string, public reports: string[]) {
+    // super calls the parent class constructor.
+    super(id, 'IT');
+    this.lastReport = reports[0];
+  }
+
+  addReport(text: string){
+    this.reports.push(text);
+    this.lastReport = text[0]
+  }
+
+  printReport() {
+    console.log(this.reports);
+  }
+}
+
 //Constructor is called at this point.
-const accounting = new Department('d1', 'Accounting');
-console.log("🚀 ~ file: app.ts ~ line 12 ~ accounting", accounting)
-accounting.describe();
-
-accounting.addEmployee('Max')
-accounting.addEmployee('Manu')
-
-accounting.printEmployeeInfo();
+const it = new ITDepartment('d1', []);
+console.log(it.mostRecentReport);
